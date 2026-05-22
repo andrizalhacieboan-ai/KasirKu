@@ -5,17 +5,14 @@ const { createClient } = require('@libsql/client');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Koneksi Turso Database
 const db = createClient({
   url: process.env.TURSO_DATABASE_URL || '',
   authToken: process.env.TURSO_AUTH_TOKEN || ''
 });
 
-// Database initialization flag
 let dbInitialized = false;
 
 async function initDatabase() {
@@ -138,21 +135,17 @@ async function initDatabase() {
       await db.execute("INSERT INTO users (username, password, role, key_password) VALUES ('andriyt', 'andriyt002', 'admin', 'key002')");
     }
     dbInitialized = true;
-    console.log('Database berhasil diinisialisasi');
   } catch (err) {
-    console.error('Gagal inisialisasi database:', err.message);
+    console.error('DB init error:', err.message);
   }
 }
 
-// Middleware: pastikan DB siap sebelum handle request
 app.use(async (req, res, next) => {
   await initDatabase();
   next();
 });
 
-// ==================== API ROUTES ====================
-
-// Login
+// ==================== LOGIN ====================
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -171,7 +164,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Ganti Password
+// ==================== CHANGE PASSWORD ====================
 app.post('/api/change-password', async (req, res) => {
   try {
     const { userId, oldPassword, newPassword } = req.body;
@@ -192,7 +185,7 @@ app.post('/api/change-password', async (req, res) => {
   }
 });
 
-// Add Admin
+// ==================== ADD ADMIN ====================
 app.post('/api/add-admin', async (req, res) => {
   try {
     const { username, password, keyPassword } = req.body;
@@ -209,7 +202,7 @@ app.post('/api/add-admin', async (req, res) => {
   }
 });
 
-// Add User
+// ==================== ADD USER ====================
 app.post('/api/add-user', async (req, res) => {
   try {
     const { username, password, keyPassword } = req.body;
@@ -226,7 +219,7 @@ app.post('/api/add-user', async (req, res) => {
   }
 });
 
-// ==================== AREA ====================
+// ==================== AREAS ====================
 app.get('/api/areas', async (req, res) => {
   try {
     const result = await db.execute("SELECT * FROM areas ORDER BY id DESC");
@@ -268,7 +261,7 @@ app.delete('/api/customers/:id', async (req, res) => {
   } catch (err) { res.json({ success: false, message: err.message }); }
 });
 
-// ==================== PRODUCTS / STOK ====================
+// ==================== PRODUCTS ====================
 app.get('/api/products', async (req, res) => {
   try {
     const result = await db.execute("SELECT * FROM products ORDER BY id DESC");
@@ -307,7 +300,7 @@ app.post('/api/sales', async (req, res) => {
   try {
     const { customer_id, items, bayar } = req.body;
     let total = 0;
-    items.forEach(item => { total += item.qty * item.harga; });
+    items.forEach(function(item) { total += item.qty * item.harga; });
     const kembalian = bayar - total;
     const saleResult = await db.execute({
       sql: "INSERT INTO sales (customer_id, total, bayar, kembalian, user_id) VALUES (?, ?, ?, ?, 1)",
@@ -321,11 +314,11 @@ app.post('/api/sales', async (req, res) => {
       });
       await db.execute({ sql: "UPDATE products SET stok = stok - ? WHERE id = ?", args: [item.qty, item.product_id] });
     }
-    res.json({ success: true, message: 'Transaksi penjualan berhasil!', saleId });
+    res.json({ success: true, message: 'Transaksi penjualan berhasil!', saleId: saleId });
   } catch (err) { res.json({ success: false, message: err.message }); }
 });
 
-// Sale Returns
+// ==================== SALE RETURNS ====================
 app.get('/api/sale-returns', async (req, res) => {
   try {
     const result = await db.execute("SELECT * FROM sale_returns ORDER BY id DESC");
@@ -351,7 +344,7 @@ app.post('/api/purchases', async (req, res) => {
   try {
     const { supplier, items } = req.body;
     let total = 0;
-    items.forEach(item => { total += item.qty * item.harga; });
+    items.forEach(function(item) { total += item.qty * item.harga; });
     const purchaseResult = await db.execute({
       sql: "INSERT INTO purchases (supplier, total, user_id) VALUES (?, ?, 1)",
       args: [supplier || '', total]
@@ -364,11 +357,11 @@ app.post('/api/purchases', async (req, res) => {
       });
       await db.execute({ sql: "UPDATE products SET stok = stok + ? WHERE id = ?", args: [item.qty, item.product_id] });
     }
-    res.json({ success: true, message: 'Transaksi pembelian berhasil!', purchaseId });
+    res.json({ success: true, message: 'Transaksi pembelian berhasil!', purchaseId: purchaseId });
   } catch (err) { res.json({ success: false, message: err.message }); }
 });
 
-// Purchase Returns
+// ==================== PURCHASE RETURNS ====================
 app.get('/api/purchase-returns', async (req, res) => {
   try {
     const result = await db.execute("SELECT * FROM purchase_returns ORDER BY id DESC");
@@ -415,7 +408,7 @@ app.post('/api/payable-payments', async (req, res) => {
   } catch (err) { res.json({ success: false, message: err.message }); }
 });
 
-// ==================== DATABASE MANAGEMENT ====================
+// ==================== DB MANAGEMENT ====================
 app.post('/api/db/backup', async (req, res) => {
   try {
     const tables = ['users','areas','customers','products','sales','sale_items','sale_returns','purchases','purchase_items','purchase_returns','receivables','receivable_payments','payables','payable_payments'];
@@ -440,5 +433,4 @@ app.post('/api/db/tutup-buku', async (req, res) => {
   } catch (err) { res.json({ success: false, message: err.message }); }
 });
 
-// Export untuk Vercel serverless function
 module.exports = app;
