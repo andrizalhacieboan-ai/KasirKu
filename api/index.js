@@ -8,15 +8,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ==================== VALIDASI ENV ====================
+const TURSO_URL = process.env.TURSO_DATABASE_URL;
+const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
+
+if (!TURSO_URL || !TURSO_TOKEN) {
+  console.error('==============================================');
+  console.error('ERROR: Environment Variables belum diatur!');
+  console.error('Pastikan TURSO_DATABASE_URL dan TURSO_AUTH_TOKEN sudah diset di Vercel.');
+  console.error('==============================================');
+}
+
 const db = createClient({
-  url: process.env.TURSO_DATABASE_URL || '',
-  authToken: process.env.TURSO_AUTH_TOKEN || ''
+  url: TURSO_URL || '',
+  authToken: TURSO_TOKEN || ''
 });
 
 let dbInitialized = false;
 
 async function initDatabase() {
   if (dbInitialized) return;
+  
+  // Jika tidak ada kredensial, skip init dan biarkan fallback client-side yang handle
+  if (!TURSO_URL || !TURSO_TOKEN) {
+    console.warn('DB init skipped: TURSO_DATABASE_URL atau TURSO_AUTH_TOKEN kosong.');
+    return;
+  }
+  
   try {
     await db.execute(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -135,10 +153,13 @@ async function initDatabase() {
       await db.execute("INSERT INTO users (username, password, role, key_password) VALUES ('andriyt', 'andriyt002', 'admin', 'key002')");
     }
     dbInitialized = true;
+    console.log('Database berhasil diinisialisasi');
   } catch (err) {
     console.error('DB init error:', err.message);
+    
   }
 }
+
 
 app.use(async (req, res, next) => {
   await initDatabase();
