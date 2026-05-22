@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KasirKu - Meja Kasir Online</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div id="loginOverlay">
+    <div class="login-shapes">
+      <div class="login-shape"></div>
+      <div class="login-shape"></div>
+      <div class="login-shape"></div>
+      <div class="login-shape"></div>
+      <div class="login-shape"></div>
+      <div class="login-shape"></div>
+      </div>
+      <div class="login-card" id="loginCard">
+      <div class="login-logo">
+      <h1>KasirKu</h1>
+      <p>Meja Kasir By Andri Store</p>
+      </div>
+      <div class="login-error" id="loginError">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="loginErrorMsg">Username atau password salah!</span>
+      </div>
+      <div class="form-group">
+      <label for="loginUser">User ID</label>
+      <input type="text" id="loginUser" class="form-input" placeholder="Masukkan user ID" autocomplete="username">
+      </div>
+      <div class="form-group">
+      <label for="loginPass">Password</label>
+      <input type="password" id="loginPass" class="form-input" placeholder="Masukkan password" autocomplete="current-password">
+      </div>
+      <div class="login-buttons">
+      <button class="btn btn-primary" id="btnLoginOk" style="flex:1;">
+      <i class="fa-solid fa-right-to-bracket"></i> OK
+      </button>
+      <button class="btn btn-secondary" id="btnLoginCancel">
+      <i class="fa-solid fa-xmark"></i> CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+  
+      <div id="mainApp">
+      <nav class="navbar">
+      <div class="nav-brand">Kasir<span>Ku</span></div>
+      <ul class="nav-menu">
+       <li class="nav-item">
+       <button class="nav-link"><i class="fa-solid fa-user-gear"></i> Profil <i class="fa-solid fa-chevron-down arrow"></i></button>
+       <div class="dropdown-menu">
+       <button class="dropdown-item" data-section="profil-ganti-password"><span class="dot"></span> Ganti Password</button>
+       <button class="dropdown-item" data-section="profil-add-admin"><span class="dot"></span>Add Admin</button>
+       <button class="dropdown-item" data-section="profil-add-user"><span class="dot"></span>Add User</button>
+       </div>
+       </li>
+   
+       <li class="nav-item">
+       <button class="nav-link"><i class="fa-solid fa-database"></i>Master<i class="fa-solid fa-chevron-down arrow"></i></button>
+       <div class="dropdown-menu">
+       <button class="dropdown-item" data-section="master-area"><span class="dot"></span>Daftar Area</button>
+       <button class="dropdown-item" data-section="master-langganan"><span class="dot"></span>Daftar Langganan</button>
+        <button class="dropdown-item" data-section="master-stok"><span class="dot"></span>Daftar Stok</button>
+        </div>
+        </li>
+        
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-cart-shopping"></i>Penjualan<i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="penjualan-transaksi"><span class="dot"></span>Transaksi Penjualan 30 Hari</button>
+        <button class="dropdown-item" data-section="penjualan-return"><span class="dot"></span>Transaksi Return Penjualan</button>
+        <button class="dropdown-item" data-section="penjualan-cetak"><span class="dot"></span>Cetak Ulang Nota Penjualan</button>
+        </div>
+        </li>
+       
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i>Piutang <i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="piutang-penagihan"><span class="dot"></span>Transaksi Penagihan Piutang</button>
+        </div>
+        </li>
+        
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-truck"></i>Pembelian<i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="pembelian-transaksi"><span class="dot"></span>Transaksi Pembelian</button>
+        <button class="dropdown-item" data-section="pembelian-return"><span class="dot"></span>Return Pembelian</button>
+        </div>
+        </li>
+        
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i> Hutang <i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="hutang-pembayaran"><span class="dot"></span>Transaksi Pembayaran Hutang</button>
+        </div>
+        </li>
+        
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-server"></i>Database <i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="db-periode"><span class="dot"></span>Pilih Periode Database</button>
+        <button class="dropdown-item" data-section="db-index"><span class="dot"></span>Index Database</button>
+        <button class="dropdown-item" data-section="db-backup"><span class="dot"></span>Backup Database</button>
+        <button class="dropdown-item" data-section="db-refresh"><span class="dot"></span>Refresh Database</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" data-section="db-transfer"><span class="dot"></span>Transfer Data Penjualan Olympic</button>
+        <button class="dropdown-item" data-section="db-update"><span class="dot"></span>Update Data Penjualan</button>
+        <button class="dropdown-item" data-section="db-dropbox"><span class="dot"></span>Dropbox</button>
+        <button class="dropdown-item" data-section="db-spp"><span class="dot"></span>Proses SPP</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" data-section="db-reset-opname"><span class="dot"></span>Reset Data Opname</button>
+        <button class="dropdown-item" data-section="db-reupdate-saldo"><span class="dot"></span>Re-Update Saldo Periode Sebelumnya</button>
+        <button class="dropdown-item" data-section="db-export-excel"><span class="dot"></span>Export Raw Data ke Excel</button>
+       <button class="dropdown-item" data-section="db-tutup-buku"><span class="dot"></span>Tutup Buku Bulanan</button>
+        </div>
+        </li>
+       
+        <li class="nav-item">
+        <button class="nav-link"><i class="fa-solid fa-circle-info"></i>Informasi <i class="fa-solid fa-chevron-down arrow"></i></button>
+        <div class="dropdown-menu">
+        <button class="dropdown-item" data-section="info-help"><span class="dot"></span>Help</button>
+        <button class="dropdown-item" data-section="info-tentang"><span class="dot"></span>Tentang Program</button>
+        <button class="dropdown-item" data-section="info-developer"><span class="dot"></span>Developer & Kontak</button>
+        </div>
+        </li>
+        
+        <li class="nav-item">
+        <button class="nav-link" id="navExit"><i class="fa-solid fa-right-from-bracket"></i>Exit</button>
+       </li>
+       </ul>
+       </nav>
+       <main class="content-wrapper" id="contentArea">
+       </main>
+       <footer class="footer">
+       <div class="footer-grid">
+       <div class="footer-brand">
+          <h3>KasirKu BY ANDRI STORE</h3>
+          <p>Aplikasi meja kasir online yang dirancang untuk mempermudah pengelolaan transaksi penjualan, pembelian, piutang, dan hutang bisnis Anda secara efisien dan terintegrasi.</p>
+       <div class="footer-social">
+       <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+       <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+       <a href="#" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+       <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+       <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+       </div>
+       </div>
+       <div class="footer-col">
+       <h4>Menu Utama</h4>
+       <ul>
+       <li><button onclick="navigateTo('master-stok')">Daftar Stok</button></li>
+       <li><button onclick="navigateTo('penjualan-transaksi')">Penjualan</button></li>
+       <li><button onclick="navigateTo('pembelian-transaksi')">Pembelian</button></li>
+       <li><button onclick="navigateTo('piutang-penagihan')">Piutang</button></li>
+       <li><button onclick="navigateTo('hutang-pembayaran')">Hutang</button></li>
+       </ul>
+       </div>
+       <div class="footer-col">
+       <h4>Pengaturan</h4>
+       <ul>
+       <li><button onclick="navigateTo('profil-ganti-password')">Ganti Password</button></li>
+       <li><button onclick="navigateTo('db-backup')">Backup Database</button></li>
+       <li><button onclick="navigateTo('info-help')">Bantuan</button></li>
+       <li><button onclick="navigateTo('info-tentang')">Tentang</button></li>
+       <li><button onclick="navigateTo('info-developer')">Developer</button></li>
+       </ul>
+       </div>
+       <div class="footer-col">
+       <h4>Kontak & Sosial</h4>
+       <ul>
+       <li><i class="fa-solid fa-envelope text-orange"></i> support@andrizalhacieboan</li>
+       <li><i class="fa-solid fa-phone text-orange"></i>+6281934874758</li>
+       <li><i class="fa-solid fa-location-dot text-orange"></i>Pekanbaru, Indonesia</li>
+       <li style="margin-top:8px;"><i class="fa-brands fa-instagram text-orange"></i>@limabelasjuny15</li>
+       <li><i class="fa-brands fa-youtube text-orange"></i>andristoreID</li>
+        </ul>
+        </div>
+        </div>
+        <div class="footer-bottom">
+        <p>&copy; 2025-2026 <span>KasirKu</span>.All rights reserved.</p>
+        <p>Dibuat dengan<span><i class="fa-solid fa-heart"></i></span>untuk Indonesia</p>
+        </div>
+        </footer>
+        </div>
+        <div class="toast-container" id="toastContainer"></div>
+        <div class="modal-overlay" id="modalOverlay">
+       <div class="modal" id="modalContent">
+       </div>
+       </div>
+<script src="index.js"></script>
+</body>
+</html>
