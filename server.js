@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname)));
 // Koneksi Turso Database
 const db = createClient({
   url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN
+  authToken: process.env.TURSO_AUTH_TOKEN, 
 });
 
 // Inisialisasi Database
