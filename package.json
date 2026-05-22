@@ -1,0 +1,19 @@
+{
+  "name": "kasirku",
+  "version": "1.0.0",
+  "description": "Aplikasi Meja Kasir Online KasirKu - Neo Brutalism Edition by andri store",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@libsql/client": "^0.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
