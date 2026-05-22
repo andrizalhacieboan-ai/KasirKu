@@ -1,7 +1,7 @@
 // State global
 let currentUser = null;
 let currentSection = 'dashboard';
-const API_BASE = window.location.origin + '/api';
+const API_BASE = '/api';
 
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
